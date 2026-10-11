@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- open book -->
+    <path
+        android:fillColor="@color/icon_foreground"
+        android:pathData="M30,38 C36,35 44,35 52,39 L52,72 C44,68 36,68 30,71 Z" />
+    <path
+        android:fillColor="@color/icon_foreground"
+        android:pathData="M56,39 C64,35 72,35 78,38 L78,71 C72,68 64,68 56,72 Z" />
+    <!-- clock badge -->
+    <path
+        android:fillColor="@color/icon_accent"
+        android:pathData="M67,58 m-11,0 a11,11 0,1 1,22 0 a11,11 0,1 1,-22 0" />
+    <path
+        android:fillColor="@color/brand_teal_dark"
+        android:pathData="M66,51 L68,51 L68,57.2 L72.5,60 L71.5,61.7 L66,58.3 Z" />
+</vector>

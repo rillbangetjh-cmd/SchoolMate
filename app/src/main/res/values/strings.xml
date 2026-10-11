@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">SchoolMate</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_subjects">Mapel</string>
+    <string name="nav_tasks">Tugas</string>
+    <string name="nav_focus">Fokus</string>
+    <string name="nav_settings">Pengaturan</string>
+
+    <string name="action_save">Simpan</string>
+    <string name="action_cancel">Batal</string>
+    <string name="action_delete">Hapus</string>
+
+    <string name="home_set_name_hint">Atur nama panggilanmu di Pengaturan supaya sapaan terasa lebih personal.</string>
+    <string name="home_subjects_title">Mata pelajaran</string>
+    <string name="home_subjects_empty">Belum ada mata pelajaran. Tambahkan dulu sebagai dasar jadwal dan tugas.</string>
+    <plurals name="home_subjects_count">
+        <item quantity="one">%d mata pelajaran tersimpan</item>
+        <item quantity="other">%d mata pelajaran tersimpan</item>
+    </plurals>
+    <string name="home_manage_subjects">Kelola mata pelajaran</string>
+    <string name="home_roadmap_title">Segera hadir</string>
+    <string name="home_roadmap_body">Jadwal pelajaran mingguan, tugas dan PR dengan deadline, pengingat ujian, serta timer fokus Pomodoro.</string>
+
+    <string name="subjects_title">Mata pelajaran</string>
+    <string name="subjects_add">Tambah mapel</string>
+    <string name="subjects_empty_title">Belum ada mata pelajaran</string>
+    <string name="subjects_empty_body">Tambahkan mata pelajaran yang kamu ikuti. Data tersimpan di perangkat dan bisa dipakai tanpa internet.</string>
+    <string name="subjects_field_name">Nama mata pelajaran</string>
+    <string name="subjects_field_teacher">Nama guru (opsional)</string>
+    <string name="subjects_field_color">Warna</string>
+    <string name="subjects_color_cd">Warna %d</string>
+    <string name="subjects_error_empty">Nama tidak boleh kosong</string>
+    <string name="subjects_error_too_long" tools:ignore="PluralsCandidate">Maksimal %d karakter</string>
+    <string name="subjects_error_duplicate">Mata pelajaran ini sudah ada</string>
+    <string name="subjects_delete_cd">Hapus %s</string>
+    <string name="subjects_delete_title">Hapus mata pelajaran?</string>
+    <string name="subjects_delete_body">%s akan dihapus dari perangkat ini.</string>
+
+    <string name="tasks_title">Tugas dan PR</string>
+    <string name="tasks_coming_soon">Daftar tugas dengan deadline, prioritas, dan pengingat sedang dikembangkan.</string>
+    <string name="focus_title">Mode fokus</string>
+    <string name="focus_coming_soon">Timer Pomodoro dan statistik waktu belajar sedang dikembangkan.</string>
+
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_profile">Profil</string>
+    <string name="settings_name_label">Nama panggilan</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_theme_system">Ikuti sistem</string>
+    <string name="settings_theme_light">Terang</string>
+    <string name="settings_theme_dark">Gelap</string>
+    <string name="settings_dynamic_color">Warna dinamis</string>
+    <string name="settings_dynamic_color_desc">Gunakan warna dari wallpaper (Android 12+)</string>
+    <string name="settings_about">Tentang</string>
+    <string name="settings_version">Versi %1$s (%2$d)</string>
+    <string name="settings_offline_note">Semua data disimpan secara lokal di perangkat ini. SchoolMate tidak membutuhkan akun atau koneksi internet.</string>
+</resources>
