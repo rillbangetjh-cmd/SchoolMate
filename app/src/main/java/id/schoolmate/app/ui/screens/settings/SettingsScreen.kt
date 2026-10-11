@@ -73,6 +73,7 @@ fun SettingsScreen(
             onDynamicColorChange = viewModel::setUseDynamicColor,
             onOpenSubjects = onOpenSubjects,
             onOpenStudyLog = onOpenStudyLog,
+            notificationSection = { NotificationSettingsSection() },
         )
     }
 }
@@ -85,6 +86,7 @@ private fun SettingsContent(
     onDynamicColorChange: (Boolean) -> Unit,
     onOpenSubjects: () -> Unit = {},
     onOpenStudyLog: () -> Unit = {},
+    notificationSection: @Composable () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     var name by rememberSaveable(preferences.studentName) { mutableStateOf(preferences.studentName) }
@@ -123,6 +125,10 @@ private fun SettingsContent(
                 Text(stringResource(R.string.action_save))
             }
         }
+
+        HorizontalDivider(Modifier.padding(top = 16.dp))
+        SectionLabel(stringResource(R.string.settings_notifications))
+        notificationSection()
 
         HorizontalDivider(Modifier.padding(top = 16.dp))
         SectionLabel(stringResource(R.string.settings_data))

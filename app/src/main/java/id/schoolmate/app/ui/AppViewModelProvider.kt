@@ -14,6 +14,7 @@ import id.schoolmate.app.ui.screens.home.HomeViewModel
 import id.schoolmate.app.ui.screens.schedule.ScheduleEditorViewModel
 import id.schoolmate.app.ui.screens.schedule.ScheduleViewModel
 import id.schoolmate.app.ui.screens.settings.SettingsViewModel
+import id.schoolmate.app.ui.screens.settings.NotificationSettingsViewModel
 import id.schoolmate.app.ui.screens.studylog.StudyLogViewModel
 import id.schoolmate.app.ui.screens.subjects.SubjectsViewModel
 import id.schoolmate.app.ui.screens.tasks.TaskDetailViewModel
@@ -41,6 +42,7 @@ object AppViewModelProvider {
         }
         initializer { SubjectsViewModel(container().subjectRepository) }
         initializer { SettingsViewModel(container().userPreferencesRepository) }
+        initializer { NotificationSettingsViewModel(container().notificationPreferencesRepository) }
         initializer {
             val c = container()
             ScheduleViewModel(c.scheduleRepository, c.subjectRepository, minuteTicker(c.clock), c.clock)

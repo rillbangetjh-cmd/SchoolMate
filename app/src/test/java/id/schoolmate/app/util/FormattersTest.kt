@@ -29,4 +29,9 @@ class FormattersTest {
         assertEquals(true, Formatters.dateShort(LocalDate.of(2026, 10, 14), today).startsWith("Rab, 14 Okt"))
         assertEquals(true, Formatters.dateShort(LocalDate.of(2027, 1, 4), today).endsWith("2027"))
     }
+
+    @Test fun leadTimes() {
+        assertEquals(listOf("5 menit", "30 menit", "1 jam", "3 jam", "1 hari", "2 hari", "3 hari", "1 jam 30 menit"),
+            listOf(5, 30, 60, 180, 1_440, 2_880, 4_320, 90).map(Formatters::leadTime))
+    }
 }

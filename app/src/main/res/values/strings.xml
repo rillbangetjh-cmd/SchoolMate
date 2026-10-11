@@ -190,4 +190,35 @@
     <string name="settings_about">Tentang</string>
     <string name="settings_version">Versi %1$s (%2$d)</string>
     <string name="settings_offline_note">Semua data disimpan secara lokal di perangkat ini. SchoolMate tidak membutuhkan akun atau koneksi internet.</string>
+    <!-- Tahap 4: notifikasi -->
+    <string name="settings_notifications">Notifikasi</string>
+    <string name="notif_master">Aktifkan pengingat</string>
+    <string name="notif_master_desc">Pengingat lokal di perangkat, tanpa internet</string>
+    <string name="notif_permission_title">Izin notifikasi Android</string>
+    <string name="notif_permission_granted">Diizinkan</string>
+    <string name="notif_permission_needed">Belum diizinkan. Pengingat tidak akan muncul.</string>
+    <string name="notif_permission_blocked">Dimatikan di pengaturan Android. Aktifkan lagi agar pengingat muncul.</string>
+    <string name="notif_permission_allow">Izinkan</string>
+    <string name="notif_open_settings">Buka pengaturan</string>
+    <string name="notif_tasks">Pengingat tugas</string>
+    <string name="notif_tasks_lead">Waktu sebelum deadline</string>
+    <string name="notif_exams">Pengingat ujian</string>
+    <string name="notif_exams_lead">Waktu sebelum ujian dimulai</string>
+    <string name="notif_lessons">Pengingat pelajaran</string>
+    <string name="notif_lessons_lead">Waktu sebelum pelajaran dimulai</string>
+    <string name="notif_timing_note">Android bisa menunda pengingat beberapa menit untuk menghemat baterai. Pengingat tugas dan ujian yang jatuh pukul 21.00–06.00 dimajukan ke pukul 19.00 malam sebelumnya.</string>
+    <string name="channel_tasks_name">Pengingat tugas</string>
+    <string name="channel_tasks_description">Pengingat sebelum deadline tugas dan PR</string>
+    <string name="channel_exams_name">Pengingat ujian</string>
+    <string name="channel_exams_description">Pengingat sebelum ujian dimulai</string>
+    <string name="channel_lessons_name">Pengingat pelajaran</string>
+    <string name="channel_lessons_description">Pengingat sebelum pelajaran di jadwal mingguan dimulai</string>
+    <string name="reminder_task_text">Deadline %1$s</string>
+    <string name="reminder_exam_title">Ujian: %1$s</string>
+    <string name="reminder_lesson_title" tools:ignore="PluralsCandidate">%1$s mulai %2$d menit lagi</string>
+    <string name="reminder_lesson_room">%1$s · Ruang %2$s</string>
+    <string name="reminder_today">hari ini</string>
+    <string name="reminder_tomorrow">besok</string>
+    <string name="reminder_day_time">%1$s pukul %2$s</string>
+    <string name="reminder_day_end">%1$s (akhir hari)</string>
 </resources>

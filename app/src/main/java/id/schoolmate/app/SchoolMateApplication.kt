@@ -15,5 +15,7 @@ class SchoolMateApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         container = DefaultAppContainer(this)
+        // Channels must exist before the first notification; creating them again is a no-op.
+        container.reminderNotifier.createChannels()
     }
 }

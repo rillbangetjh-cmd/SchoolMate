@@ -18,6 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import id.schoolmate.app.domain.model.ReminderKind
+import id.schoolmate.app.notifications.ReminderTarget
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -62,8 +65,24 @@ private fun NavDestination?.isTopLevel(): Boolean =
     this?.hierarchy?.any { d -> TopLevelDestination.entries.any { d.hasRoute(it.route::class) } } == true
 
 @Composable
-fun SchoolMateApp(navController: NavHostController = rememberNavController()) {
+fun SchoolMateApp(
+    navController: NavHostController = rememberNavController(),
+    openTarget: ReminderTarget? = null,
+    onTargetHandled: () -> Unit = {},
+) {
     val backStackEntry by navController.currentBackStackEntryAsState()
+
+    // Notification tap: rebuild a clean stack (Beranda → detail) so Back returns to the app.
+    LaunchedEffect(openTarget) {
+        val target = openTarget ?: return@LaunchedEffect
+        navController.navigate(HomeRoute) { popUpTo(navController.graph.id) { inclusive = true } }
+        when (target.kind) {
+            ReminderKind.TASK -> navController.navigate(TaskDetailRoute(target.entityId))
+            ReminderKind.EXAM -> navController.navigate(ExamDetailRoute(target.entityId))
+            ReminderKind.LESSON -> navController.navigateToTopLevel(TopLevelDestination.SCHEDULE)
+        }
+        onTargetHandled()
+    }
     val currentDestination = backStackEntry?.destination
     val showBottomBar = currentDestination == null || currentDestination.isTopLevel()
 
