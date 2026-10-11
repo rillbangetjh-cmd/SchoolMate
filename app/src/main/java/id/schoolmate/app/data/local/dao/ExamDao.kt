@@ -29,6 +29,9 @@ interface ExamDao {
     fun observeCountBetween(from: LocalDate, to: LocalDate): Flow<Int>
 
     @Query("SELECT * FROM exams WHERE id = :id")
+    fun observeById(id: Long): Flow<ExamEntity?>
+
+    @Query("SELECT * FROM exams WHERE id = :id")
     suspend fun getById(id: Long): ExamEntity?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)

@@ -27,8 +27,7 @@ class ObserveDashboardSummaryUseCase(
     private val studySessionRepository: StudySessionRepository,
     private val clock: Clock,
 ) {
-    operator fun invoke(): Flow<DashboardSummary> {
-        val today = LocalDate.now(clock)
+    operator fun invoke(today: LocalDate = LocalDate.now(clock)): Flow<DashboardSummary> {
         val weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val weekEnd = weekStart.plusDays(6)
         return combine(

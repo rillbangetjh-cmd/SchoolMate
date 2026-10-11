@@ -19,6 +19,9 @@ import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -53,13 +56,25 @@ import id.schoolmate.app.ui.components.EmptyState
 import id.schoolmate.app.ui.theme.SubjectPalette
 import id.schoolmate.app.util.MAX_SUBJECT_NAME_LENGTH
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubjectsScreen(viewModel: SubjectsViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+fun SubjectsScreen(
+    onBack: () -> Unit,
+    viewModel: SubjectsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
     val subjects by viewModel.subjects.collectAsStateWithLifecycle()
     val editor by viewModel.editor.collectAsStateWithLifecycle()
     var pendingDelete by remember { mutableStateOf<Subject?>(null) }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.subjects_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.action_back)) }
+                },
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = viewModel::openEditor,
@@ -79,16 +94,13 @@ fun SubjectsScreen(viewModel: SubjectsViewModel = viewModel(factory = AppViewMod
                 message = stringResource(R.string.subjects_empty_body),
                 modifier = Modifier.padding(padding),
             )
-            else -> LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
-                item {
-                    Text(
-                        stringResource(R.string.subjects_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                    )
-                }
+            else -> LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 96.dp),
+            ) {
                 items(list, key = { it.id }) { subject ->
                     ListItem(
+                        modifier = Modifier.animateItem(),
                         leadingContent = {
                             Box(Modifier.size(16.dp).clip(CircleShape).background(Color(subject.colorArgb)))
                         },
@@ -105,7 +117,7 @@ fun SubjectsScreen(viewModel: SubjectsViewModel = viewModel(factory = AppViewMod
                             }
                         },
                     )
-                    HorizontalDivider()
+                    HorizontalDivider(Modifier.animateItem())
                 }
             }
         }

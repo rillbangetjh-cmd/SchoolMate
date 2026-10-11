@@ -1,5 +1,17 @@
 package id.schoolmate.app.ui.screens.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material3.Icon
+
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +56,11 @@ import id.schoolmate.app.domain.model.UserPreferences
 import id.schoolmate.app.ui.AppViewModelProvider
 
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+fun SettingsScreen(
+    onOpenSubjects: () -> Unit,
+    onOpenStudyLog: () -> Unit,
+    viewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     when (val s = state) {
         SettingsUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -55,6 +71,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel(factory = AppViewMod
             onSaveName = viewModel::saveStudentName,
             onThemeChange = viewModel::setThemeMode,
             onDynamicColorChange = viewModel::setUseDynamicColor,
+            onOpenSubjects = onOpenSubjects,
+            onOpenStudyLog = onOpenStudyLog,
         )
     }
 }
@@ -65,13 +83,19 @@ private fun SettingsContent(
     onSaveName: (String) -> Unit,
     onThemeChange: (ThemeMode) -> Unit,
     onDynamicColorChange: (Boolean) -> Unit,
+    onOpenSubjects: () -> Unit = {},
+    onOpenStudyLog: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     var name by rememberSaveable(preferences.studentName) { mutableStateOf(preferences.studentName) }
     val nameChanged = name.trim() != preferences.studentName
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(vertical = 24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
+            .verticalScroll(rememberScrollState())
+            .padding(vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
@@ -99,6 +123,23 @@ private fun SettingsContent(
                 Text(stringResource(R.string.action_save))
             }
         }
+
+        HorizontalDivider(Modifier.padding(top = 16.dp))
+        SectionLabel(stringResource(R.string.settings_data))
+        ListItem(
+            modifier = Modifier.clickable(onClick = onOpenSubjects),
+            leadingContent = { Icon(Icons.AutoMirrored.Outlined.MenuBook, contentDescription = null) },
+            headlineContent = { Text(stringResource(R.string.home_manage_subjects)) },
+            supportingContent = { Text(stringResource(R.string.settings_subjects_desc)) },
+            trailingContent = { Icon(Icons.Outlined.ChevronRight, contentDescription = null) },
+        )
+        ListItem(
+            modifier = Modifier.clickable(onClick = onOpenStudyLog),
+            leadingContent = { Icon(Icons.Outlined.Timer, contentDescription = null) },
+            headlineContent = { Text(stringResource(R.string.study_title)) },
+            supportingContent = { Text(stringResource(R.string.settings_study_desc)) },
+            trailingContent = { Icon(Icons.Outlined.ChevronRight, contentDescription = null) },
+        )
 
         HorizontalDivider(Modifier.padding(top = 16.dp))
         SectionLabel(stringResource(R.string.settings_appearance))

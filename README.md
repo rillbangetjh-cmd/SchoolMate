@@ -6,14 +6,18 @@ Aplikasi Android manajemen waktu untuk pelajar SMA: jadwal pelajaran, tugas dan 
 
 - Tahap 1 – fondasi proyek: build stabil, arsitektur MVVM, Room, DataStore, Navigation Compose, CI yang menghasilkan APK.
 - Tahap 2 – data inti: jadwal mingguan, tugas/PR, ujian, sesi belajar (Room v2 dengan migrasi teruji), ringkasan di Beranda.
+- Tahap 3 – UI dan fitur inti: semua layar terhubung ke Room, tambah/edit/hapus untuk jadwal, tugas, dan ujian.
 
 | Fitur | Status |
 |---|---|
-| Navigasi bawah (Beranda, Mapel, Tugas, Fokus, Pengaturan) | Selesai |
-| Kelola mata pelajaran (Room) | Selesai |
+| Navigasi bawah: Beranda, Jadwal, Tugas, Ujian, Pengaturan | Selesai (tahap 3) |
+| Beranda: tanggal, pelajaran hari ini, tugas terlambat & terdekat, ujian mendatang, waktu belajar minggu ini | Selesai (tahap 3) |
+| Jadwal mingguan Senin–Minggu + form dengan deteksi bentrok langsung | Selesai (tahap 3) |
+| Tugas: urut deadline, filter Aktif/Terlambat/Selesai/Semua, centang cepat + urungkan, detail & status | Selesai (tahap 3) |
+| Ujian: mendatang/sudah lewat, form nama, mapel, tanggal, jam, durasi, catatan | Selesai (tahap 3) |
+| Catatan belajar (input manual per minggu) dan kelola mapel, lewat Pengaturan | Selesai (tahap 3) |
 | Nama panggilan, tema terang/gelap/sistem, warna dinamis (DataStore) | Selesai |
-| Lapisan data jadwal, tugas/PR, ujian, sesi belajar + ringkasan Beranda | Selesai (tahap 2) |
-| Layar jadwal, tugas, ujian; pengingat; Pomodoro | Tahap berikutnya |
+| Pengingat/notifikasi; Pomodoro (tab Fokus kembali di tahap itu) | Tahap berikutnya |
 
 ## Teknologi
 
@@ -86,11 +90,19 @@ Butuh JDK 17 dan Android SDK (platform 37 diunduh otomatis oleh AGP).
 
 ```bash
 ./gradlew assembleDebug        # APK: app/build/outputs/apk/debug/app-debug.apk
-./gradlew testDebugUnitTest    # unit test JVM + Robolectric (DAO, repository, migrasi)
+./gradlew testDebugUnitTest    # unit test JVM + Robolectric (DAO, repository, migrasi, ViewModel, alur UI)
 ./gradlew lintDebug            # Android Lint
 ```
 
 Build debug memakai debug keystore bawaan Android yang dibuat otomatis oleh AGP; tidak perlu keystore buatan sendiri.
+
+## Test
+
+- `data/` – DAO, repository, dan `MigrationTest` (v1 → v2).
+- `domain/`, `util/`, `ui/FormLogicTest` – validasi form, urutan & filter tugas, format tanggal/durasi.
+- `ui/<fitur>/*ViewModelTest` – ViewModel dengan Room in-memory dan jam tetap.
+- `ui/PersistenceAcrossRestartTest` – data tetap ada setelah database ditutup dan dibuka ulang.
+- `ui/AppFlowTest` – alur UI end-to-end di `MainActivity` asli (Compose + Robolectric): tambah jadwal, tugas, ujian lewat tombol dan form, centang selesai, filter, recreate activity, mode gelap. Set env `SCHOOLMATE_SCREENSHOT_DIR` untuk menyimpan screenshot tiap layar.
 
 ## CI
 
