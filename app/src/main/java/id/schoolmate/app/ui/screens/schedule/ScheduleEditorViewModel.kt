@@ -161,21 +161,24 @@ class ScheduleEditorViewModel(
     )
 
     fun save() {
-        val state = uiState.value
+        // Read the source-of-truth form, not the combined uiState: the latter may still be one
+        // emission behind right after a field change.
+        val state = form.value
         if (state.isSaving || state.isLoading || state.notFound) return
         val f = state.form
         val entry = ScheduleEntry(
             id = entryId, subjectId = f.subjectId ?: 0, dayOfWeek = f.day,
             startTime = f.start, endTime = f.end, room = f.room.trim(), note = f.note.trim(),
         )
-        val local = validateScheduleEntry(entry)
-        if (local.isNotEmpty() || state.conflicts.isNotEmpty()) {
-            val errors = (if (state.conflicts.isNotEmpty()) local + ValidationError.SCHEDULE_OVERLAP else local).toErrors()
-            form.update { it.copy(errors = errors) }
-            return
-        }
         form.update { it.copy(isSaving = true) }
         viewModelScope.launch {
+            val local = validateScheduleEntry(entry)
+            val conflicts = if (f.end.isAfter(f.start)) week.first().conflictsWith(f.day, f.start, f.end, entryId) else emptyList()
+            if (local.isNotEmpty() || conflicts.isNotEmpty()) {
+                val errors = (if (conflicts.isNotEmpty()) local + ValidationError.SCHEDULE_OVERLAP else local).toErrors()
+                form.update { it.copy(isSaving = false, errors = errors) }
+                return@launch
+            }
             val result = if (entryId == 0L) scheduleRepository.addEntry(entry).map { } else scheduleRepository.updateEntry(entry)
             result.onSuccess {
                 form.update { it.copy(isSaving = false) }

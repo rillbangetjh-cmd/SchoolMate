@@ -112,12 +112,12 @@ class ScheduleViewModelsTest {
         vm.uiState.awaitValue { !it.isLoading }
         vm.onEndChange(t("06:00"))
         vm.save()
-        val errors = vm.uiState.awaitValue { it.errors.time != null }.errors
+        val errors = vm.uiState.awaitValue { it.errors.time != null && !it.isSaving }.errors
         assertEquals(TimeRangeError.END_BEFORE_START, errors.time)
         assertEquals(FieldError.REQUIRED, errors.subject)
         vm.onEndChange(t("07:03"))
         vm.save()
-        assertEquals(TimeRangeError.TOO_SHORT, vm.uiState.awaitValue { it.errors.time != null }.errors.time)
+        assertEquals(TimeRangeError.TOO_SHORT, vm.uiState.awaitValue { it.errors.time == TimeRangeError.TOO_SHORT }.errors.time)
         assertTrue(env.schedule.observeWeek().first().isEmpty())
         job.cancel()
     }

@@ -53,7 +53,11 @@ class HomeViewModelTest {
         env.sessions.logSession(env.clock.instant().minusSeconds(3_600), 45, subjectId = math).getOrThrow()
 
         val vm = vm()
-        val s = vm.uiState.awaitValue { !it.isLoading && it.upcomingExams.size == 3 && it.summary.studyMinutesThisWeek == 45 }
+        val s = vm.uiState.awaitValue {
+            !it.isLoading && it.subjectCount == 1 && it.lessonsToday.size == 1 && it.overdueTasks.size == 1 &&
+                it.upcomingTasks.size == 5 && it.upcomingExams.size == 3 &&
+                it.summary.studyMinutesThisWeek == 45 && it.summary.activeTasks == 7
+        }
         assertEquals(1, s.subjectCount)
         assertEquals(1, s.lessonsToday.size)
         assertTrue("07:00–08:30 is over at 09:00", s.lessonsToday.single().isFinished)
@@ -65,11 +69,13 @@ class HomeViewModelTest {
 
         // Completing from Home removes the task from the agenda.
         vm.toggleDone(s.upcomingTasks.first().task)
-        assertEquals("Tugas 1", vm.uiState.awaitValue { it.summary.activeTasks == 6 }.upcomingTasks.first().task.title)
+        assertEquals("Tugas 1", vm.uiState.awaitValue {
+            it.summary.activeTasks == 6 && it.upcomingTasks.none { t -> t.task.title == "Tugas 0" }
+        }.upcomingTasks.first().task.title)
 
         // Midnight rollover: Tuesday's lesson replaces Monday's without re-creating the ViewModel.
         env.now.value = env.now.value.plusDays(1).withHour(7).withMinute(30)
-        val tue = vm.uiState.awaitValue { it.dateLabel.startsWith("Selasa") }
+        val tue = vm.uiState.awaitValue { it.dateLabel.startsWith("Selasa") && it.lessonsToday.singleOrNull()?.isOngoing == true }
         assertTrue(tue.lessonsToday.single().isOngoing)
         assertEquals("Selamat pagi, Rina", tue.greeting)
     }

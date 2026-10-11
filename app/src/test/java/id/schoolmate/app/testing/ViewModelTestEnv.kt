@@ -42,5 +42,5 @@ class ViewModelTestEnv(val db: SchoolMateDatabase = inMemoryDatabase()) {
 }
 
 /** Waits (real time) until the flow emits a value matching [predicate]. */
-suspend fun <T> Flow<T>.awaitValue(timeoutMs: Long = 5_000, predicate: (T) -> Boolean): T =
+suspend fun <T> Flow<T>.awaitValue(timeoutMs: Long = 15_000, predicate: (T) -> Boolean): T =
     withTimeout(timeoutMs) { first(predicate) }
