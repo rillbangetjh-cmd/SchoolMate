@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.schoolmate.app.data.preferences.UserPreferencesRepository
 import id.schoolmate.app.data.repository.SubjectRepository
+import id.schoolmate.app.domain.usecase.DashboardSummary
 import id.schoolmate.app.util.dayPeriodOf
 import id.schoolmate.app.util.greetingFor
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -20,27 +23,31 @@ data class HomeUiState(
     val dateLabel: String = "",
     val subjectCount: Int = 0,
     val hasName: Boolean = false,
+    val summary: DashboardSummary = DashboardSummary(),
     val isLoading: Boolean = true,
 )
 
 class HomeViewModel(
     preferencesRepository: UserPreferencesRepository,
     subjectRepository: SubjectRepository,
-    private val now: () -> Pair<LocalDate, LocalTime> = { LocalDate.now() to LocalTime.now() },
+    observeDashboardSummary: () -> Flow<DashboardSummary>,
+    private val clock: Clock,
 ) : ViewModel() {
 
-    private val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.forLanguageTag("id-ID"))
+    private val locale = Locale.forLanguageTag("id-ID")
+    private val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", locale)
 
     val uiState: StateFlow<HomeUiState> = combine(
         preferencesRepository.userPreferences,
         subjectRepository.observeSubjectCount(),
-    ) { prefs, count ->
-        val (date, time) = now()
+        observeDashboardSummary(),
+    ) { prefs, count, summary ->
         HomeUiState(
-            greeting = greetingFor(dayPeriodOf(time), prefs.studentName),
-            dateLabel = date.format(dateFormatter).replaceFirstChar { it.titlecase(Locale.forLanguageTag("id-ID")) },
+            greeting = greetingFor(dayPeriodOf(LocalTime.now(clock)), prefs.studentName),
+            dateLabel = LocalDate.now(clock).format(dateFormatter).replaceFirstChar { it.titlecase(locale) },
             subjectCount = count,
             hasName = prefs.studentName.isNotBlank(),
+            summary = summary,
             isLoading = false,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())

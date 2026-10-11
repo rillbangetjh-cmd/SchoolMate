@@ -15,7 +15,12 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer { MainViewModel(container().userPreferencesRepository) }
         initializer {
-            HomeViewModel(container().userPreferencesRepository, container().subjectRepository)
+            HomeViewModel(
+                preferencesRepository = container().userPreferencesRepository,
+                subjectRepository = container().subjectRepository,
+                observeDashboardSummary = container().observeDashboardSummary::invoke,
+                clock = container().clock,
+            )
         }
         initializer { SubjectsViewModel(container().subjectRepository) }
         initializer { SettingsViewModel(container().userPreferencesRepository) }

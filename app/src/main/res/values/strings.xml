@@ -20,6 +20,13 @@
         <item quantity="other">%d mata pelajaran tersimpan</item>
     </plurals>
     <string name="home_manage_subjects">Kelola mata pelajaran</string>
+    <string name="home_summary_title">Ringkasan</string>
+    <string name="home_summary_lessons_today">Pelajaran hari ini</string>
+    <string name="home_summary_active_tasks">Tugas belum selesai</string>
+    <string name="home_summary_overdue_tasks">Tugas lewat deadline</string>
+    <string name="home_summary_exams_week">Ujian 7 hari ke depan</string>
+    <string name="home_summary_study_week">Waktu belajar minggu ini</string>
+    <string name="home_summary_minutes" tools:ignore="PluralsCandidate">%d menit</string>
     <string name="home_roadmap_title">Segera hadir</string>
     <string name="home_roadmap_body">Jadwal pelajaran mingguan, tugas dan PR dengan deadline, pengingat ujian, serta timer fokus Pomodoro.</string>
 
@@ -36,7 +43,7 @@
     <string name="subjects_error_duplicate">Mata pelajaran ini sudah ada</string>
     <string name="subjects_delete_cd">Hapus %s</string>
     <string name="subjects_delete_title">Hapus mata pelajaran?</string>
-    <string name="subjects_delete_body">%s akan dihapus dari perangkat ini.</string>
+    <string name="subjects_delete_body">%s akan dihapus dari perangkat ini, termasuk jadwal pelajarannya. Tugas, ujian, dan sesi belajar tetap disimpan tanpa mata pelajaran.</string>
 
     <string name="tasks_title">Tugas dan PR</string>
     <string name="tasks_coming_soon">Daftar tugas dengan deadline, prioritas, dan pengingat sedang dikembangkan.</string>
