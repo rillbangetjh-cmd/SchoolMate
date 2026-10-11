@@ -28,9 +28,11 @@ class HomeViewModelTest {
 
     @After fun tearDown() = env.close()
 
-    private fun vm() = HomeViewModel(
-        FakeUserPreferencesRepository(UserPreferences(studentName = "Rina")),
-        env.subjects, env.schedule, env.tasks, env.exams, env.dashboard::invoke, env.now,
+    private fun vm() = env.track(
+        HomeViewModel(
+            FakeUserPreferencesRepository(UserPreferences(studentName = "Rina")),
+            env.subjects, env.schedule, env.tasks, env.exams, env.dashboard::invoke, env.now,
+        ),
     )
 
     @Test fun emptyDatabaseGivesEmptyAgenda(): Unit = runBlocking {

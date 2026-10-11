@@ -39,7 +39,7 @@ class ExamViewModelsTest {
         exam("PTS Kimia", 10, kimia)
         exam("Kuis hari ini", 0)
         exam("Ulangan lalu", -3)
-        val vm = ExamsViewModel(env.exams, env.subjects, env.now)
+        val vm = env.track(ExamsViewModel(env.exams, env.subjects, env.now))
 
         val upcoming = vm.uiState.awaitValue { !it.isLoading && it.items.size == 2 }
         assertEquals(ExamTab.UPCOMING, upcoming.tab)
@@ -58,7 +58,7 @@ class ExamViewModelsTest {
     }
 
     @Test fun editorValidatesDurationAndTitle(): Unit = runBlocking {
-        val vm = ExamEditorViewModel(0, env.exams, env.subjects, env.clock)
+        val vm = env.track(ExamEditorViewModel(0, env.exams, env.subjects, env.clock))
         assertEquals(env.today.plusDays(7), vm.uiState.value.form.date)
         vm.onDurationChange("abc") // rejected at input level
         assertEquals("90", vm.uiState.value.form.durationText)
@@ -72,7 +72,7 @@ class ExamViewModelsTest {
 
     @Test fun editorCreatesEditsAndDeletes(): Unit = runBlocking {
         val fis = env.subject("Fisika")
-        val create = ExamEditorViewModel(0, env.exams, env.subjects, env.clock)
+        val create = env.track(ExamEditorViewModel(0, env.exams, env.subjects, env.clock))
         create.onTitleChange("PAS Fisika")
         create.onSubjectChange(fis)
         create.onDateChange(env.today.plusDays(3))
@@ -86,7 +86,7 @@ class ExamViewModelsTest {
         assertEquals(120, saved.durationMinutes)
         assertEquals("Aula", saved.location)
 
-        val edit = ExamEditorViewModel(saved.id, env.exams, env.subjects, env.clock)
+        val edit = env.track(ExamEditorViewModel(saved.id, env.exams, env.subjects, env.clock))
         assertEquals("120", edit.uiState.awaitValue { !it.isLoading }.form.durationText)
         edit.onDurationChange("")
         edit.onTimeChange(null)
@@ -96,7 +96,7 @@ class ExamViewModelsTest {
         assertNull(updated.durationMinutes)
         assertNull(updated.startTime)
 
-        val detail = ExamDetailViewModel(saved.id, env.exams, env.subjects, env.now)
+        val detail = env.track(ExamDetailViewModel(saved.id, env.exams, env.subjects, env.now))
         val ready = detail.uiState.awaitValue { it is ExamDetailUiState.Ready } as ExamDetailUiState.Ready
         assertEquals(3L, ready.item.daysUntil)
         assertEquals("Fisika", ready.item.subject?.name)

@@ -27,7 +27,7 @@ class StudyLogViewModelTest {
 
     @Test fun logsSessionsAndSummarisesWeek(): Unit = runBlocking {
         val math = env.subject("Matematika")
-        val vm = StudyLogViewModel(env.sessions, env.subjects, env.clock)
+        val vm = env.track(StudyLogViewModel(env.sessions, env.subjects, env.clock))
         assertEquals(env.today, vm.uiState.awaitValue { !it.isLoading }.weekStart)
 
         vm.openEditor()
@@ -42,7 +42,8 @@ class StudyLogViewModelTest {
         vm.onFormChange(form.copy(durationText = "50", subjectId = math, note = "Latihan soal"))
         vm.saveSession()
         val state = vm.uiState.awaitValue { it.totalMinutes == 50 }
-        assertNull("dialog closes after saving", vm.editor.value)
+        // The dialog closes right after the insert returns; Room may emit the new total first.
+        assertNull("dialog closes after saving", vm.editor.awaitValue { it == null })
         assertEquals("Matematika", state.perSubject.single().subject?.name)
         assertEquals(env.today, state.sessions.single().first.date)
 
@@ -51,7 +52,7 @@ class StudyLogViewModelTest {
     }
 
     @Test fun weekNavigationStopsAtCurrentWeek(): Unit = runBlocking {
-        val vm = StudyLogViewModel(env.sessions, env.subjects, env.clock)
+        val vm = env.track(StudyLogViewModel(env.sessions, env.subjects, env.clock))
         vm.uiState.awaitValue { !it.isLoading }
         vm.nextWeek()
         assertTrue(vm.uiState.awaitValue { !it.isLoading }.isCurrentWeek)

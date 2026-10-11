@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Android 13+: runtime permission, requested only when the user turns reminders on. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Re-register reminders after a restart (alarms are cleared on reboot). -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- No SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM: reminders use inexact, Doze-friendly alarms. -->
+
     <application
         android:name=".SchoolMateApplication"
         android:allowBackup="true"
@@ -14,6 +20,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.SchoolMate.Starting"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -21,6 +28,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".notifications.ReminderReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".notifications.SystemEventsReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

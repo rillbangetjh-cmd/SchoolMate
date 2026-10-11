@@ -44,6 +44,12 @@ object Formatters {
         }
     }
 
+    /** Reminder lead time: 10 → "10 menit", 60 → "1 jam", 1440 → "1 hari". */
+    fun leadTime(minutes: Int): String = when {
+        minutes >= 1_440 && minutes % 1_440 == 0 -> "${minutes / 1_440} hari"
+        else -> duration(minutes.toLong())
+    }
+
     /** Compact variant for tight rows: "1j 30m", "45m". */
     fun durationShort(minutes: Long): String {
         val h = minutes / 60

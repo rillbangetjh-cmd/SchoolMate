@@ -1,6 +1,17 @@
 package id.schoolmate.app.ui
 
+import android.Manifest
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationManager
 import android.graphics.Bitmap
+import android.os.Looper
+import androidx.compose.ui.test.performScrollTo
+import id.schoolmate.app.notifications.AlarmReminderScheduler
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.ShadowAlarmManager
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -36,6 +47,7 @@ import java.io.File
  * Set the env var SCHOOLMATE_SCREENSHOT_DIR to also save PNG screenshots of each screen.
  */
 @OptIn(ExperimentalTestApi::class)
+@Suppress("DEPRECATION") // ScheduledAlarm.operation has no non-deprecated accessor
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(qualifiers = "w400dp-h860dp-xhdpi")
@@ -158,10 +170,51 @@ class AppFlowTest {
         rule.onNode(hasScrollAction()).performScrollToNode(hasText("PTS Matematika"))
         waitText("PTS Matematika")
 
+        // Notifications: opt in from Settings. The Android 13+ system dialog cannot be driven in
+        // Robolectric, so the permission is granted up front (as if the user tapped "Izinkan").
+        shadowOf(app).grantPermissions(Manifest.permission.POST_NOTIFICATIONS)
+        rule.onNodeWithTag("nav_settings").performClick()
+        rule.onNodeWithTag("notif_master").performScrollTo().performClick()
+        waitText("Diizinkan")
+        waitText("Pengingat ujian")
+        shot("12a_settings_notifications")
+
+        // The in-app observer plans an alarm for the exam straight from Room.
+        val alarms = shadowOf(app.getSystemService(AlarmManager::class.java))
+        fun token(a: ShadowAlarmManager.ScheduledAlarm): String? =
+            a.operation?.let { shadowOf(it).savedIntent.getStringExtra(AlarmReminderScheduler.EXTRA_TOKEN) }
+        rule.waitUntil(10_000) { alarms.scheduledAlarms.any { token(it)?.startsWith("exam:") == true } }
+        val examAlarm = alarms.scheduledAlarms.first { token(it)?.startsWith("exam:") == true }
+        assertTrue("inexact, Doze-friendly alarm", examAlarm.isAllowWhileIdle)
+
+        // Fire it through the real (manifest) receiver → a notification appears.
+        app.sendBroadcast(shadowOf(examAlarm.operation!!).savedIntent)
+        val notifications = shadowOf(app.getSystemService(NotificationManager::class.java))
+        // Robolectric delivers the broadcast on the paused main looper; the receiver then works on a
+        // background coroutine (goAsync), exactly like on a device.
+        repeat(100) {
+            if (notifications.allNotifications.isNotEmpty()) return@repeat
+            shadowOf(Looper.getMainLooper()).idle()
+            Thread.sleep(100)
+        }
+        val posted = notifications.allNotifications.single()
+        assertEquals("Ujian: PTS Matematika", posted.extras.getString(Notification.EXTRA_TITLE))
+        assertEquals("reminders_exam", posted.channelId)
+
+        // Tapping it while the app is open opens that exam's detail; Back returns to Beranda.
+        val tap = shadowOf(posted.contentIntent).savedIntent
+        rule.activityRule.scenario.onActivity { it.onNewIntent(tap) }
+        waitText("Waktu")
+        text("PTS Matematika").assertExists()
+        shot("12b_opened_from_notification")
+        desc("Kembali").performClick()
+        waitText("Agenda hari ini")
+
         // Settings: switch to dark mode; the whole app re-themes.
         rule.onNodeWithTag("nav_settings").performClick()
-        text("Gelap").performClick()
+        text("Gelap").performScrollTo().performClick()
         rule.waitForIdle()
+        rule.onNodeWithTag("notif_master").performScrollTo()
         shot("12_settings_dark")
         rule.onNodeWithTag("nav_home").performClick()
         waitText("Agenda hari ini")
