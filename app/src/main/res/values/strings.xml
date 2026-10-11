@@ -3,32 +3,51 @@
     <string name="app_name">SchoolMate</string>
 
     <string name="nav_home">Beranda</string>
-    <string name="nav_subjects">Mapel</string>
+    <string name="nav_schedule">Jadwal</string>
     <string name="nav_tasks">Tugas</string>
-    <string name="nav_focus">Fokus</string>
+    <string name="nav_exams">Ujian</string>
     <string name="nav_settings">Pengaturan</string>
 
     <string name="action_save">Simpan</string>
     <string name="action_cancel">Batal</string>
     <string name="action_delete">Hapus</string>
+    <string name="action_edit">Ubah</string>
+    <string name="action_back">Kembali</string>
+    <string name="action_undo">Urungkan</string>
+    <string name="action_ok">OK</string>
+    <string name="action_see_all">Lihat semua</string>
+    <string name="action_clear">Hapus pilihan</string>
+    <string name="not_found_title">Data tidak ditemukan</string>
+    <string name="not_found_body">Data ini mungkin sudah dihapus.</string>
+    <string name="no_subject">Tanpa mapel</string>
+    <string name="field_required">Wajib diisi</string>
+    <string name="field_too_long" tools:ignore="PluralsCandidate">Maksimal %d karakter</string>
+    <string name="field_subject_missing">Mata pelajaran tidak ditemukan, pilih lagi</string>
+    <string name="delete_confirm_title">Hapus %s?</string>
+    <string name="delete_confirm_body">Data ini akan dihapus permanen dari perangkat.</string>
 
     <string name="home_set_name_hint">Atur nama panggilanmu di Pengaturan supaya sapaan terasa lebih personal.</string>
     <string name="home_subjects_title">Mata pelajaran</string>
     <string name="home_subjects_empty">Belum ada mata pelajaran. Tambahkan dulu sebagai dasar jadwal dan tugas.</string>
-    <plurals name="home_subjects_count">
-        <item quantity="one">%d mata pelajaran tersimpan</item>
-        <item quantity="other">%d mata pelajaran tersimpan</item>
-    </plurals>
     <string name="home_manage_subjects">Kelola mata pelajaran</string>
-    <string name="home_summary_title">Ringkasan</string>
+    <string name="home_today_title">Agenda hari ini</string>
+    <string name="home_today_empty">Tidak ada pelajaran hari ini.</string>
+    <string name="home_today_setup">Atur jadwal</string>
+    <string name="home_overdue_title">Lewat deadline</string>
+    <string name="home_tasks_title">Tugas terdekat</string>
+    <string name="home_tasks_empty">Tidak ada tugas yang menunggu. Mantap.</string>
+    <string name="home_exams_title">Ujian mendatang</string>
+    <string name="home_exams_empty">Belum ada ujian yang dijadwalkan.</string>
+    <string name="home_study_title">Belajar minggu ini</string>
+    <string name="home_study_hint">Ketuk untuk melihat dan mencatat sesi belajar</string>
+    <string name="home_add_task">Tugas</string>
+    <string name="home_add_exam">Ujian</string>
+    <string name="home_add_lesson">Jadwal</string>
+    <string name="lesson_now">Sedang berlangsung</string>
+    <string name="lesson_done">Selesai</string>
     <string name="home_summary_lessons_today">Pelajaran hari ini</string>
     <string name="home_summary_active_tasks">Tugas belum selesai</string>
-    <string name="home_summary_overdue_tasks">Tugas lewat deadline</string>
     <string name="home_summary_exams_week">Ujian 7 hari ke depan</string>
-    <string name="home_summary_study_week">Waktu belajar minggu ini</string>
-    <string name="home_summary_minutes" tools:ignore="PluralsCandidate">%d menit</string>
-    <string name="home_roadmap_title">Segera hadir</string>
-    <string name="home_roadmap_body">Jadwal pelajaran mingguan, tugas dan PR dengan deadline, pengingat ujian, serta timer fokus Pomodoro.</string>
 
     <string name="subjects_title">Mata pelajaran</string>
     <string name="subjects_add">Tambah mapel</string>
@@ -46,9 +65,115 @@
     <string name="subjects_delete_body">%s akan dihapus dari perangkat ini, termasuk jadwal pelajarannya. Tugas, ujian, dan sesi belajar tetap disimpan tanpa mata pelajaran.</string>
 
     <string name="tasks_title">Tugas dan PR</string>
-    <string name="tasks_coming_soon">Daftar tugas dengan deadline, prioritas, dan pengingat sedang dikembangkan.</string>
-    <string name="focus_title">Mode fokus</string>
-    <string name="focus_coming_soon">Timer Pomodoro dan statistik waktu belajar sedang dikembangkan.</string>
+    <string name="tasks_add">Tambah tugas</string>
+    <string name="tasks_edit">Ubah tugas</string>
+    <string name="tasks_filter_all">Semua</string>
+    <string name="tasks_filter_active">Aktif</string>
+    <string name="tasks_filter_overdue">Terlambat</string>
+    <string name="tasks_filter_done">Selesai</string>
+    <string name="tasks_empty_title">Belum ada tugas</string>
+    <string name="tasks_empty_body">Catat PR dan tugas beserta deadline-nya. Semuanya tersimpan di perangkat.</string>
+    <string name="tasks_empty_active">Semua tugas sudah selesai. Waktunya istirahat sejenak.</string>
+    <string name="tasks_empty_overdue">Tidak ada tugas yang terlambat.</string>
+    <string name="tasks_empty_done">Belum ada tugas yang selesai.</string>
+    <string name="tasks_completed_snackbar">Tugas ditandai selesai</string>
+    <string name="tasks_mark_done_cd">Tandai %s selesai</string>
+    <string name="tasks_mark_undone_cd">Tandai %s belum selesai</string>
+    <string name="task_field_title">Judul tugas</string>
+    <string name="task_field_description">Deskripsi</string>
+    <string name="task_field_subject">Mata pelajaran</string>
+    <string name="task_field_due_date">Tanggal deadline</string>
+    <string name="task_field_due_time">Jam deadline</string>
+    <string name="task_field_due_time_none">Akhir hari</string>
+    <string name="task_field_priority">Prioritas</string>
+    <string name="task_field_status">Status</string>
+    <string name="priority_low">Rendah</string>
+    <string name="priority_medium">Sedang</string>
+    <string name="priority_high">Tinggi</string>
+    <string name="status_todo">Belum</string>
+    <string name="status_in_progress">Dikerjakan</string>
+    <string name="status_done">Selesai</string>
+    <string name="status_todo_long">Belum dikerjakan</string>
+    <string name="status_in_progress_long">Sedang dikerjakan</string>
+    <string name="status_done_long">Selesai</string>
+    <string name="deadline_overdue_today">Terlambat hari ini</string>
+    <string name="deadline_overdue_days" tools:ignore="PluralsCandidate">Terlambat %d hari</string>
+    <string name="deadline_today">Hari ini</string>
+    <string name="deadline_today_at">Hari ini %s</string>
+    <string name="deadline_tomorrow">Besok</string>
+    <string name="deadline_tomorrow_at">Besok %s</string>
+    <string name="deadline_in_days" tools:ignore="PluralsCandidate">%d hari lagi</string>
+    <string name="deadline_done">Selesai</string>
+    <string name="task_detail_deadline">Deadline</string>
+    <string name="task_detail_completed_at">Diselesaikan %s</string>
+    <string name="task_detail_no_description">Tidak ada deskripsi.</string>
+
+    <string name="schedule_title">Jadwal mingguan</string>
+    <string name="schedule_add">Tambah jadwal</string>
+    <string name="schedule_edit">Ubah jadwal</string>
+    <string name="schedule_day_empty">Tidak ada pelajaran di hari %s.</string>
+    <string name="schedule_day_empty_action">Tambahkan pelajaran pertama untuk hari ini.</string>
+    <string name="schedule_no_subjects_title">Tambahkan mata pelajaran dulu</string>
+    <string name="schedule_no_subjects_body">Jadwal dibuat dari mata pelajaran yang kamu ikuti.</string>
+    <string name="schedule_day_summary" tools:ignore="PluralsCandidate">%1$d pelajaran · %2$s</string>
+    <string name="schedule_field_day">Hari</string>
+    <string name="schedule_field_subject">Mata pelajaran</string>
+    <string name="schedule_field_start">Mulai</string>
+    <string name="schedule_field_end">Selesai</string>
+    <string name="schedule_field_room">Ruang (opsional)</string>
+    <string name="schedule_field_note">Catatan (opsional)</string>
+    <string name="schedule_duration">Durasi %s</string>
+    <string name="schedule_error_subject">Pilih mata pelajaran</string>
+    <string name="schedule_error_end_before_start">Jam selesai harus setelah jam mulai</string>
+    <string name="schedule_error_too_short" tools:ignore="PluralsCandidate">Durasi minimal %d menit</string>
+    <string name="schedule_conflict_title">Bentrok jadwal</string>
+    <string name="schedule_conflict_body">Waktu ini bertabrakan dengan %1$s (%2$s). Ubah jam atau hari agar bisa disimpan.</string>
+    <string name="subjects_manage_cd">Kelola mata pelajaran</string>
+
+    <string name="exams_title">Ujian</string>
+    <string name="exams_add">Tambah ujian</string>
+    <string name="exams_edit">Ubah ujian</string>
+    <string name="exams_tab_upcoming">Mendatang</string>
+    <string name="exams_tab_past">Sudah lewat</string>
+    <string name="exams_empty_title">Belum ada ujian</string>
+    <string name="exams_empty_body">Catat ulangan dan ujian supaya persiapanmu lebih terarah.</string>
+    <string name="exams_empty_past">Belum ada ujian yang sudah lewat.</string>
+    <string name="exam_field_title">Nama ujian</string>
+    <string name="exam_field_subject">Mata pelajaran</string>
+    <string name="exam_field_date">Tanggal</string>
+    <string name="exam_field_time">Jam mulai</string>
+    <string name="exam_field_time_none">Belum diketahui</string>
+    <string name="exam_field_duration">Durasi (menit)</string>
+    <string name="exam_field_location">Lokasi (opsional)</string>
+    <string name="exam_field_note">Catatan / materi (opsional)</string>
+    <string name="exam_error_duration" tools:ignore="PluralsCandidate">Isi 1–%d menit, atau kosongkan</string>
+    <string name="exam_countdown_today">Hari ini</string>
+    <string name="exam_countdown_tomorrow">Besok</string>
+    <string name="exam_countdown_days" tools:ignore="PluralsCandidate">%d hari lagi</string>
+    <string name="exam_countdown_past" tools:ignore="PluralsCandidate">%d hari lalu</string>
+    <string name="exam_detail_when">Waktu</string>
+    <string name="exam_detail_duration">Durasi</string>
+    <string name="exam_detail_location">Lokasi</string>
+    <string name="exam_detail_note">Catatan</string>
+
+    <string name="study_title">Catatan belajar</string>
+    <string name="study_add">Catat sesi</string>
+    <string name="study_week_range">%1$s – %2$s</string>
+    <string name="study_week_total">Total minggu ini</string>
+    <string name="study_week_total_other">Total minggu tersebut</string>
+    <string name="study_previous_week">Minggu sebelumnya</string>
+    <string name="study_next_week">Minggu berikutnya</string>
+    <string name="study_empty_title">Belum ada sesi belajar</string>
+    <string name="study_empty_body">Catat waktu belajarmu secara manual. Timer fokus otomatis akan hadir di tahap berikutnya.</string>
+    <string name="study_per_subject">Per mata pelajaran</string>
+    <string name="study_sessions">Sesi</string>
+    <string name="study_field_subject">Mata pelajaran (opsional)</string>
+    <string name="study_field_date">Tanggal</string>
+    <string name="study_field_start">Jam mulai</string>
+    <string name="study_field_duration">Durasi (menit)</string>
+    <string name="study_field_note">Catatan (opsional)</string>
+    <string name="study_error_duration" tools:ignore="PluralsCandidate">Isi %1$d–%2$d menit</string>
+    <string name="study_delete_cd">Hapus sesi</string>
 
     <string name="settings_title">Pengaturan</string>
     <string name="settings_profile">Profil</string>
@@ -59,6 +184,9 @@
     <string name="settings_theme_dark">Gelap</string>
     <string name="settings_dynamic_color">Warna dinamis</string>
     <string name="settings_dynamic_color_desc">Gunakan warna dari wallpaper (Android 12+)</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_subjects_desc">Tambah, ubah warna, atau hapus mapel</string>
+    <string name="settings_study_desc">Riwayat dan total waktu belajar per minggu</string>
     <string name="settings_about">Tentang</string>
     <string name="settings_version">Versi %1$s (%2$d)</string>
     <string name="settings_offline_note">Semua data disimpan secara lokal di perangkat ini. SchoolMate tidak membutuhkan akun atau koneksi internet.</string>

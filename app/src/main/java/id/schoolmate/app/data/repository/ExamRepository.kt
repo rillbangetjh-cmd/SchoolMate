@@ -15,6 +15,7 @@ interface ExamRepository {
     fun observeUpcoming(from: LocalDate): Flow<List<Exam>>
     fun observeBetween(from: LocalDate, to: LocalDate): Flow<List<Exam>>
     fun observeCountBetween(from: LocalDate, to: LocalDate): Flow<Int>
+    fun observeExam(id: Long): Flow<Exam?>
 
     suspend fun addExam(exam: Exam): Result<Long>
     suspend fun updateExam(exam: Exam): Result<Unit>
@@ -32,6 +33,7 @@ class OfflineExamRepository(
     override fun observeBetween(from: LocalDate, to: LocalDate): Flow<List<Exam>> =
         dao.observeBetween(from, to).map { list -> list.map { it.toDomain() } }
     override fun observeCountBetween(from: LocalDate, to: LocalDate): Flow<Int> = dao.observeCountBetween(from, to)
+    override fun observeExam(id: Long): Flow<Exam?> = dao.observeById(id).map { it?.toDomain() }
 
     override suspend fun addExam(exam: Exam): Result<Long> {
         validateExam(exam).toFailureOrNull()?.let { return it }
