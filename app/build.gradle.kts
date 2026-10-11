@@ -15,8 +15,8 @@ android {
         applicationId = "id.schoolmate.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -46,6 +46,18 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    testOptions {
+        unitTests {
+            // Robolectric needs merged Android resources.
+            isIncludeAndroidResources = true
+            all {
+                it.maxHeapSize = "2g"
+                // Migration tests read the exported Room schemas straight from the repo.
+                it.systemProperty("schoolmate.roomSchemaDir", "$projectDir/schemas")
+            }
+        }
     }
 
     lint {
@@ -91,6 +103,9 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.junit)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
