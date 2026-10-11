@@ -41,7 +41,7 @@ class ScheduleViewModelsTest {
         lesson(bio, DayOfWeek.MONDAY, "10:00", "11:30")
         lesson(math, DayOfWeek.MONDAY, "08:30", "10:00", room = "X-1")
         lesson(math, DayOfWeek.WEDNESDAY, "07:00", "08:30")
-        val vm = ScheduleViewModel(env.schedule, env.subjects, env.now, env.clock)
+        val vm = env.track(ScheduleViewModel(env.schedule, env.subjects, env.now, env.clock))
 
         val state = vm.uiState.awaitValue { !it.isLoading && it.totalLessons == 3 }
         assertEquals(DayOfWeek.MONDAY, state.selectedDay) // fixed clock = Monday
@@ -64,7 +64,7 @@ class ScheduleViewModelsTest {
     @Test fun editorSuggestsNextFreeSlotAndSaves(): Unit = runBlocking {
         val math = env.subject("Matematika")
         lesson(math, DayOfWeek.TUESDAY, "07:00", "08:30")
-        val vm = ScheduleEditorViewModel(0, DayOfWeek.TUESDAY, env.schedule, env.subjects)
+        val vm = env.track(ScheduleEditorViewModel(0, DayOfWeek.TUESDAY, env.schedule, env.subjects))
         val job = launch { vm.uiState.collect {} }
         val ready = vm.uiState.awaitValue { !it.isLoading }
         assertEquals(t("08:30"), ready.form.start)
@@ -84,7 +84,7 @@ class ScheduleViewModelsTest {
         val math = env.subject("Matematika")
         val bio = env.subject("Biologi")
         lesson(math, DayOfWeek.MONDAY, "07:00", "08:30")
-        val vm = ScheduleEditorViewModel(0, DayOfWeek.MONDAY, env.schedule, env.subjects)
+        val vm = env.track(ScheduleEditorViewModel(0, DayOfWeek.MONDAY, env.schedule, env.subjects))
         val job = launch { vm.uiState.collect {} }
         vm.uiState.awaitValue { !it.isLoading }
         vm.onSubjectChange(bio)
@@ -107,7 +107,7 @@ class ScheduleViewModelsTest {
 
     @Test fun editorValidatesTimeAndSubject(): Unit = runBlocking {
         env.subject("A"); env.subject("B") // two subjects → nothing preselected
-        val vm = ScheduleEditorViewModel(0, DayOfWeek.FRIDAY, env.schedule, env.subjects)
+        val vm = env.track(ScheduleEditorViewModel(0, DayOfWeek.FRIDAY, env.schedule, env.subjects))
         val job = launch { vm.uiState.collect {} }
         vm.uiState.awaitValue { !it.isLoading }
         vm.onEndChange(t("06:00"))
@@ -125,7 +125,7 @@ class ScheduleViewModelsTest {
     @Test fun editingIgnoresItselfAndCanDelete(): Unit = runBlocking {
         val math = env.subject("Matematika")
         val id = lesson(math, DayOfWeek.THURSDAY, "07:00", "08:30")
-        val vm = ScheduleEditorViewModel(id, DayOfWeek.MONDAY, env.schedule, env.subjects)
+        val vm = env.track(ScheduleEditorViewModel(id, DayOfWeek.MONDAY, env.schedule, env.subjects))
         val job = launch { vm.uiState.collect {} }
         val loaded = vm.uiState.awaitValue { !it.isLoading }
         assertEquals(DayOfWeek.THURSDAY, loaded.form.day)

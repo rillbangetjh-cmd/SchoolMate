@@ -44,7 +44,7 @@ class TaskViewModelsTest {
         add("Terlambat", -1)
         add("Nanti sore", 0, LocalTime.of(15, 0))
         add("Sudah", 2, status = TaskStatus.DONE)
-        val vm = TasksViewModel(env.tasks, env.subjects, env.now)
+        val vm = env.track(TasksViewModel(env.tasks, env.subjects, env.now))
 
         val active = vm.uiState.awaitValue { !it.isLoading && it.items.size == 3 }
         assertEquals(TaskFilter.ACTIVE, active.filter)
@@ -67,7 +67,7 @@ class TaskViewModelsTest {
 
     @Test fun quickCompleteCanBeUndone(): Unit = runBlocking {
         val id = add("PR Fisika", 1, status = TaskStatus.IN_PROGRESS)
-        val vm = TasksViewModel(env.tasks, env.subjects, env.now)
+        val vm = env.track(TasksViewModel(env.tasks, env.subjects, env.now))
         val item = vm.uiState.awaitValue { it.items.isNotEmpty() }.items.single()
 
         vm.toggleDone(item.task)
@@ -84,14 +84,14 @@ class TaskViewModelsTest {
 
     @Test fun deleteRemovesTask(): Unit = runBlocking {
         val id = add("Hapus aku", 1)
-        val vm = TasksViewModel(env.tasks, env.subjects, env.now)
+        val vm = env.track(TasksViewModel(env.tasks, env.subjects, env.now))
         vm.uiState.awaitValue { it.items.size == 1 }
         vm.delete(id)
         vm.uiState.awaitValue { !it.isLoading && it.totalTasks == 0 }
     }
 
     @Test fun editorValidatesBeforeSaving(): Unit = runBlocking {
-        val vm = TaskEditorViewModel(0, env.tasks, env.subjects, env.clock)
+        val vm = env.track(TaskEditorViewModel(0, env.tasks, env.subjects, env.clock))
         assertTrue(vm.uiState.value.isNew)
         assertEquals(env.today.plusDays(1), vm.uiState.value.form.dueDate) // default: tomorrow
         vm.onTitleChange("   ")
@@ -106,7 +106,7 @@ class TaskViewModelsTest {
 
     @Test fun editorCreatesAndEditsTask(): Unit = runBlocking {
         val bio = env.subject("Biologi")
-        val create = TaskEditorViewModel(0, env.tasks, env.subjects, env.clock)
+        val create = env.track(TaskEditorViewModel(0, env.tasks, env.subjects, env.clock))
         create.onTitleChange("  Laporan praktikum ")
         create.onDescriptionChange("Bab 3")
         create.onSubjectChange(bio)
@@ -122,7 +122,7 @@ class TaskViewModelsTest {
         assertEquals(LocalTime.of(20, 0), saved.dueTime)
         assertEquals(Priority.HIGH, saved.priority)
 
-        val edit = TaskEditorViewModel(saved.id, env.tasks, env.subjects, env.clock)
+        val edit = env.track(TaskEditorViewModel(saved.id, env.tasks, env.subjects, env.clock))
         val loaded = edit.uiState.awaitValue { !it.isLoading }
         assertEquals("Laporan praktikum", loaded.form.title)
         edit.onStatusChange(TaskStatus.DONE)
@@ -136,11 +136,11 @@ class TaskViewModelsTest {
     }
 
     @Test fun editorHandlesMissingTaskAndDelete(): Unit = runBlocking {
-        val missing = TaskEditorViewModel(999, env.tasks, env.subjects, env.clock)
+        val missing = env.track(TaskEditorViewModel(999, env.tasks, env.subjects, env.clock))
         assertTrue(missing.uiState.awaitValue { !it.isLoading }.notFound)
 
         val id = add("Hapus", 1)
-        val edit = TaskEditorViewModel(id, env.tasks, env.subjects, env.clock)
+        val edit = env.track(TaskEditorViewModel(id, env.tasks, env.subjects, env.clock))
         edit.uiState.awaitValue { !it.isLoading }
         edit.delete()
         assertEquals(EditorEvent.Deleted, withTimeout(5_000) { edit.eventFlow.first() })
@@ -149,7 +149,7 @@ class TaskViewModelsTest {
 
     @Test fun detailShowsTaskAndChangesStatus(): Unit = runBlocking {
         val id = add("Ringkasan bab", 0, LocalTime.of(10, 0))
-        val vm = TaskDetailViewModel(id, env.tasks, env.subjects, env.now)
+        val vm = env.track(TaskDetailViewModel(id, env.tasks, env.subjects, env.now))
         val ready = vm.uiState.awaitValue { it is TaskDetailUiState.Ready } as TaskDetailUiState.Ready
         assertEquals("Ringkasan bab", ready.item.task.title)
         vm.setStatus(TaskStatus.IN_PROGRESS)

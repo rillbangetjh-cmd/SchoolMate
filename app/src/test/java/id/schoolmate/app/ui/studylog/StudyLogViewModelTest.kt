@@ -27,7 +27,7 @@ class StudyLogViewModelTest {
 
     @Test fun logsSessionsAndSummarisesWeek(): Unit = runBlocking {
         val math = env.subject("Matematika")
-        val vm = StudyLogViewModel(env.sessions, env.subjects, env.clock)
+        val vm = env.track(StudyLogViewModel(env.sessions, env.subjects, env.clock))
         assertEquals(env.today, vm.uiState.awaitValue { !it.isLoading }.weekStart)
 
         vm.openEditor()
@@ -52,7 +52,7 @@ class StudyLogViewModelTest {
     }
 
     @Test fun weekNavigationStopsAtCurrentWeek(): Unit = runBlocking {
-        val vm = StudyLogViewModel(env.sessions, env.subjects, env.clock)
+        val vm = env.track(StudyLogViewModel(env.sessions, env.subjects, env.clock))
         vm.uiState.awaitValue { !it.isLoading }
         vm.nextWeek()
         assertTrue(vm.uiState.awaitValue { !it.isLoading }.isCurrentWeek)
